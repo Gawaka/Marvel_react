@@ -12,9 +12,22 @@ class MarvelService {
         return await res.json();
     }
 
-    getAllCharacters = async ()=> {
-        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`);
-        return res.data.results.map(this._transformCharacter);
+    // getAllCharacters = async ()=> {
+    //     const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`);
+    //     return res.data.results.map(this._transformAllCharacters);  // //  ПЕрвый вариант
+    // }
+
+    getAllCharacters = async (offset = 0)=> {
+        const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=${offset}&${this._apiKey}`);
+        return res.data.results.map(this._transformAllCharacters);
+    }
+
+    _transformAllCharacters = (char) => {
+        return {
+            id: char.id,
+            name: char.name,
+            thumbnail: char.thumbnail.path + '.' + char.thumbnail.extension
+        }
     }
 
     getCharacter = async (id)=> {                                                                   // // Метод получающий 1 персонажа
