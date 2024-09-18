@@ -7,7 +7,6 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component {                            // // класс
-
     state = {
         char: {},
         loading: true,
@@ -26,8 +25,17 @@ class RandomChar extends Component {                            // // класс
     }
 
     onCharLoaded = (char) => {
-        this.setState({char, loading: false})
-        console.log(char);
+        this.setState({
+            char, 
+            loading: false
+        })
+        // console.log(char);
+    }
+
+    onCharLoading = ()=> {
+        this.setState({
+            loading: true
+        })
     }
 
     onError = ()=> {
