@@ -6,7 +6,6 @@ import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 
 class RandomChar extends Component{
-
     state = {
         char: {},
         loading: true,
@@ -31,6 +30,12 @@ class RandomChar extends Component{
         })
     }
 
+    onCharLoading = ()=> {
+        this.setState({
+            loading: true
+        })
+    }
+
     onError = ()=> {
         this.setState({
             loading: false,
@@ -40,6 +45,7 @@ class RandomChar extends Component{
 
     updateChar = ()=> {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        this.onCharLoading();
         this.marvelService
             .getCharacter(id)
             .then(this.onCharLoaded)
