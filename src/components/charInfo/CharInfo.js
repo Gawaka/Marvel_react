@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import './charInfo.scss';
 import MarvelService from '../../services/MarvelService';
 import Spinner from '../Spinner/Spinner';
@@ -124,5 +125,7 @@ const View = ({char})=> {
         </>
     )
 }
+
+
 
 export default CharInfo;

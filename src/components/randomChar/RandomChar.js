@@ -28,6 +28,9 @@ class RandomChar extends Component{
             char, 
             loading: false
         })
+
+        // console.log(char);
+        
     }
 
     onCharLoading = ()=> {
