@@ -1,4 +1,4 @@
-import {Component} from 'react';
+import React, { Component} from 'react';
 import PropTypes from 'prop-types';
 import Spinner from '../Spinner/Spinner';
 import ErrorMessage from '../errorMessage/ErrorMessage';
@@ -6,6 +6,7 @@ import MarvelService from '../../services/MarvelService';
 import './charList.scss';
 
 class CharList extends Component {
+    charFocusRef = React.createRef();
 
     state = {
         charList: [],
@@ -13,13 +14,21 @@ class CharList extends Component {
         error: false,
         newItemLoading: false,
         offset: 315,
-        charEnded: false
+        charEnded: false,
+        activeCharId: null
     }
     
     marvelService = new MarvelService();
 
     componentDidMount() {
         this.onRequest();
+    }
+
+    charFocus = ()=> {
+        if (this.charFocusRef.current) {
+            console.log('Focus', this.charFocusRef.current)
+            this.charFocusRef.current.focus();
+        }
     }
 
     onRequest = (offset)=> {
@@ -47,7 +56,7 @@ class CharList extends Component {
                 newItemLoading: false,
                 offset: offset + 9,
                 charEnded: ended
-            }))
+            }), this.charFocus)
         // console.log(charList);
     }
 
@@ -61,17 +70,24 @@ class CharList extends Component {
     // Этот метод для оптимизации, 
     // чтобы не помещать такую конструкцию в метод render
     renderItems(arr) {
-        const items =  arr.map((item) => {
+        const items =  arr.map((item, i) => {
             let imgStyle = {'objectFit' : 'cover'};
             if (item.thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
                 imgStyle = {'objectFit' : 'unset'};
             }
             
             return (
-                <li 
-                    className="char__item"
+                <li
+                    ref={i == 0 ? this.charFocusRef : null}
+                    className={`char__item ${item.id === this.state.activeCharId ? 'char__item_selected' : ''}`}
                     key={item.id}
-                    onClick={()=> this.props.onCharSelected(item.id)}>
+                    onClick={()=> {
+                        this.setState({activeCharId: item.id}, ()=> {
+                            console.log(this.state.activeCharId)
+                        })
+                        this.props.onCharSelected(item.id)
+                    }}
+                    >
                         <img src={item.thumbnail} alt={item.name} style={imgStyle}/>
                         <div className="char__name">{item.name}</div>
                 </li>
